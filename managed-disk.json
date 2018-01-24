@@ -1,0 +1,28 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "disks_md_disk1_name": {
+            "defaultValue": "md-disk1",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "comments": "Generalized from resource: '/subscriptions/9c9dd9b9-2cb5-4945-845a-911eeb000f45/resourceGroups/mdtest/providers/Microsoft.Compute/disks/md-disk1'.",
+            "type": "Microsoft.Compute/disks",
+            "name": "[parameters('disks_md_disk1_name')]",
+            "apiVersion": "2016-04-30-preview",
+            "location": "eastus",
+            "properties": {
+                "accountType": "Premium_LRS",
+                "creationData": {
+                    "createOption": "Empty"
+                },
+                "diskSizeGB": 1023
+            },
+            "dependsOn": []
+        }
+    ]
+}
