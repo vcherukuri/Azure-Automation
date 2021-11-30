@@ -1,0 +1,108 @@
+{
+  "properties": {
+    "displayName": "Enable Security Center's auto provisioning of the Log Analytics agent on your subscriptions with custom workspace.",
+    "policyType": "Custom",
+    "mode": "All",
+    "description": "vasavi-Allow Security Center to auto provision the Log Analytics agent on your subscriptions to monitor and collect security data using a custom workspace.",
+    "metadata": {
+      "category": "Security Center",
+      "createdBy": "90ab4fcb-ed57-4772-8231-4662ef60dfa1",
+      "createdOn": "2021-11-08T14:43:08.2008827Z",
+      "updatedBy": null,
+      "updatedOn": null
+    },
+    "parameters": {
+      "effect": {
+        "type": "String",
+        "metadata": {
+          "displayName": "Effect",
+          "description": "Enable or disable the execution of the policy"
+        },
+        "allowedValues": [
+          "DeployIfNotExists",
+          "Disabled"
+        ],
+        "defaultValue": "DeployIfNotExists"
+      },
+      "logAnalytics": {
+        "type": "String",
+        "metadata": {
+          "displayName": "Log Analytics workspace",
+          "description": "Auto provision the Log Analytics agent on your subscriptions to monitor and collect security data using a custom workspace.",
+          "strongType": "omsWorkspace"
+        }
+      }
+    },
+    "policyRule": {
+      "if": {
+        "field": "type",
+        "equals": "Microsoft.Resources/subscriptions"
+      },
+      "then": {
+        "effect": "[parameters('effect')]",
+        "details": {
+          "type": "Microsoft.Security/autoProvisioningSettings",
+          "deploymentScope": "Subscription",
+          "roleDefinitionIds": [
+            "/providers/microsoft.authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+          ],
+          "existenceCondition": {
+            "field": "Microsoft.Security/autoProvisioningSettings/autoProvision",
+            "equals": "On"
+          },
+          "deployment": {
+            "location": "westus",
+            "properties": {
+              "mode": "incremental",
+              "parameters": {
+                "logAnalytics": {
+                  "value": "[parameters('logAnalytics')]"
+                }
+              },
+              "template": {
+                "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                "contentVersion": "1.0.0.0",
+                "parameters": {
+                  "logAnalytics": {
+                    "type": "string"
+                  }
+                },
+                "variables": {},
+                "resources": [
+                  {
+                    "type": "Microsoft.Security/autoProvisioningSettings",
+                    "name": "default",
+                    "apiVersion": "2017-08-01-preview",
+                    "properties": {
+                      "autoProvision": "On"
+                    }
+                  },
+                  {
+                    "type": "Microsoft.Security/workspaceSettings",
+                    "apiVersion": "2017-08-01-preview",
+                    "name": "default",
+                    "properties": {
+		    "workspaceId": "9184cf7e-92b9-4cf2-bee7-75207e19da56",
+                      "scope": "[subscription().id]"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "id": "/subscriptions/855cade6-f4ae-43be-9173-4d897cbfa407/providers/Microsoft.Authorization/policyDefinitions/5bd9721a-6db3-4c90-aba4-537838beba3d",
+  "type": "Microsoft.Authorization/policyDefinitions",
+  "name": "5bd9721a-6db3-4c90-aba4-537838beba3d",
+  "systemData": {
+    "createdBy": "vapasula@microsoft.com",
+    "createdByType": "User",
+    "createdAt": "2021-11-08T14:43:08.1796632Z",
+    "lastModifiedBy": "vapasula@microsoft.com",
+    "lastModifiedByType": "User",
+    "lastModifiedAt": "2021-11-08T14:43:08.1796632Z"
+  }
+}
